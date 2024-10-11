@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@^2.0/dist/tailwind.min.css" rel="stylesheet">
+    <title>Activities Page</title>
+    <script>
+        let currentProviderIndex = 0;
+        const selectedProviders = {};
+        const providers = [
+            {
+                name: 'Company 1',
+                rating: 4.5,
+                price: '$45',
+                activeTimes: 3,
+                teacher: 'Alice Smith'
+            },
+            {
+                name: 'Company 2',
+                rating: 4.5,
+                price: '$45',
+                activeTimes: 3,
+                teacher: 'Bob Johnson'
+            },
+            {
+                name: 'Company 3',
+                rating: 4.5,
+                price: '$45',
+                activeTimes: 3,
+                teacher: 'Charlie Brown'
+            },
+            {
+                name: 'Company 4',
+                rating: 4.7,
+                price: '$50',
+                activeTimes: 4,
+                teacher: 'Dana White'
+            },
+            {
+                name: 'Company 5',
+                rating: 4.8,
+                price: '$55',
+                activeTimes: 5,
+                teacher: 'Eve Black'
+            }
+        ];
+
+        function toggleProviderInfo(row) {
+            const nextRow = row.nextElementSibling;
+            if (nextRow && nextRow.classList.contains('provider-info')) {
+                nextRow.classList.toggle('hidden');
+            } else {
+                const newRow = document.createElement('tr');
+                newRow.classList.add('provider-info');
+                newRow.innerHTML = getProvidersHTML(currentProviderIndex, row.dataset.rowId);
+                row.parentNode.insertBefore(newRow, row.nextSibling);
+            }
+        }
+
+        function getProvidersHTML(startIndex, rowId) {
+            let html = `
+                <td colspan="7" class="p-4">
+                    <div class="flex items-center justify-around bg-white p-5 shadow-md rounded-lg">
+                        <button onclick="navigateProviders(-1, this, '${rowId}')" class="p-2 bg-gray-200 rounded-full">&larr;</button>`;
+            for (let i = 0; i < 3; i++) {
+                const index = (startIndex + i) % providers.length;
+                const provider = providers[index];
+                const highlightClass = selectedProviders[rowId] === provider.name ? 'bg-yellow-200' : '';
+                html += `
+                    <div class="border p-4 rounded-lg shadow text-center ${highlightClass}">
+                        <p>${provider.name}</p>
+                        <p>Rating: ${provider.rating}</p>
+                        <p>Price: ${provider.price}</p>
+                        <p>Active at school: ${provider.activeTimes} times</p>
+                        <button onclick="selectProvider('${provider.name}', '${provider.teacher}', this, '${rowId}')" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg">Select</button>
+                    </div>`;
+            }
+            html += `
+                        <button onclick="navigateProviders(1, this, '${rowId}')" class="p-2 bg-gray-200 rounded-full">&rarr;</button>
+                    </div>
+                </td>`;
+            return html;
+        }
+
+        function navigateProviders(direction, button, rowId) {
+            currentProviderIndex = (currentProviderIndex + direction + providers.length) % providers.length;
+            const providerInfo = button.closest('tr');
+            providerInfo.innerHTML = getProvidersHTML(currentProviderIndex, rowId);
+        }
+
+        function selectProvider(providerName, teacherName, button, rowId) {
+            const row = button.closest('tr').previousElementSibling;
+            row.cells[5].innerText = providerName;
+            row.cells[6].innerText = teacherName;
+            selectedProviders[rowId] = providerName;
+            const providerInfo = button.closest('tr');
+            providerInfo.innerHTML = getProvidersHTML(currentProviderIndex, rowId);
+        }
+    </script>
+</head>
+<body class="bg-gray-100 p-10">
+    <div class="container mx-auto">
+        <table class="table-auto w-full bg-white shadow-md rounded-lg">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="px-4 py-2">Activity</th>
+                    <th class="px-4 py-2">Day</th>
+                    <th class="px-4 py-2">Time</th>
+                    <th class="px-4 py-2">Groups</th>
+                    <th class="px-4 py-2">Enrolled</th>
+                    <th class="px-4 py-2">Provider</th>
+                    <th class="px-4 py-2">Teacher</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="bg-white border-b hover:bg-gray-100" onclick="toggleProviderInfo(this)" data-row-id="row1">
+                    <td class="px-4 py-2">Basketball</td>
+                    <td class="px-4 py-2">Wednesday</td>
+                    <td class="px-4 py-2">13:00</td>
+                    <td class="px-4 py-2">1,2,3</td>
+                    <td class="px-4 py-2">0/12 (20)</td>
+                    <td class="px-4 py-2">Karibu</td>
+                    <td class="px-4 py-2">John Doe</td>
+                </tr>
+                <tr class="bg-white border-b hover:bg-gray-100" onclick="toggleProviderInfo(this)" data-row-id="row2">
+                    <td class="px-4 py-2">Programming</td>
+                    <td class="px-4 py-2">Thursday</td>
+                    <td class="px-4 py-2">13:00</td>
+                    <td class="px-4 py-2">6,7,8</td>
+                    <td class="px-4 py-2">0/8 (15)</td>
+                    <td class="px-4 py-2">Karibu</td>
+                    <td class="px-4 py-2">John Doe</td>
+                </tr>
+                <tr class="bg-white border-b hover:bg-gray-100" onclick="toggleProviderInfo(this)" data-row-id="row3">
+                    <td class="px-4 py-2">Dance</td>
+                    <td class="px-4 py-2">Wednesday</td>
+                    <td class="px-4 py-2">13:00</td>
+                    <td class="px-4 py-2">4,5</td>
+                    <td class="px-4 py-2">0/12 (5)</td>
+                    <td class="px-4 py-2">-</td>
+                    <td class="px-4 py-2">-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

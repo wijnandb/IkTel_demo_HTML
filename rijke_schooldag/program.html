@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Program - IkTel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+          const checkedValues = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.nextSibling.textContent.trim());
+          const activities = document.querySelectorAll('.activity');
+          activities.forEach(activity => {
+            const grades = activity.dataset.grades.split(', ');
+            if (checkedValues.length === 0 || checkedValues.some(value => grades.includes(value))) {
+              activity.classList.remove('opacity-50');
+            } else {
+              activity.classList.add('opacity-50');
+            }
+          });
+        });
+      });
+    });
+  </script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <div class="max-w-7xl mx-auto py-8">
+    <div class="bg-white shadow-md rounded-lg p-4">
+      <nav class="mb-4">
+        <a href="#" class="text-blue-500">Home</a> /
+        <a href="#" class="text-blue-500">School</a> /
+        <a href="#" class="text-blue-500">Program</a> / Period 1
+      </nav>
+      
+      <div class="flex justify-between items-center mb-6">
+        <div class="space-x-2">
+          <button class="bg-blue-500 text-white px-4 py-2 rounded">Period 1, sept. - dec.</button>
+          <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded">Period 2, jan. - mar.</button>
+          <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded">Period 3, apr. - jul.</button>
+        </div>
+        <div class="space-x-2">
+          <label><input type="checkbox" class="mr-1">1</label>
+          <label><input type="checkbox" class="mr-1">2</label>
+          <label><input type="checkbox" class="mr-1">3</label>
+          <label><input type="checkbox" class="mr-1">4</label>
+          <label><input type="checkbox" class="mr-1">5</label>
+          <label><input type="checkbox" class="mr-1">6</label>
+          <label><input type="checkbox" class="mr-1">7</label>
+          <label><input type="checkbox" class="mr-1">8</label>
+          <select class="bg-white border border-gray-300 rounded px-2 py-1">
+            <option>School</option>
+          </select>
+        </div>
+      </div>
+      
+      <h2 class="text-xl font-semibold mb-4">Period 1, september 5 - december 16 2024 - Demo School</h2>
+      
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white">
+          <thead>
+            <tr class="bg-gray-200">
+              <th class="p-4 border border-gray-300">&nbsp;</th>
+              <th class="p-4 border border-gray-300">Maandag</th>
+              <th class="p-4 border border-gray-300">Dinsdag</th>
+              <th class="p-4 border border-gray-300">Woensdag</th>
+              <th class="p-4 border border-gray-300">Donderdag</th>
+              <th class="p-4 border border-gray-300">Vrijdag</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="p-4 border border-gray-300">14:15</td>
+              <td class="p-4 border border-gray-300">
+                <div class="activity bg-green-200 text-green-900 p-2 rounded mb-2" data-grades="6, 7, 8">Cartoon tekenen (6, 7, 8)</div>
+                <div class="activity bg-green-200 text-green-900 p-2 rounded mb-2" data-grades="6, 7, 8">Djembé (6, 7, 8)</div>
+                <div class="activity bg-yellow-200 text-yellow-900 p-2 rounded mb-2" data-grades="3, 4, 5">Gezond Eten & Koken (3, 4, 5)</div>
+                <div class="activity bg-yellow-200 text-yellow-900 p-2 rounded mb-2" data-grades="3, 4, 5">Kettingreactie (3, 4, 5)</div>
+                <div class="activity bg-red-300 text-red-900 p-2 rounded" data-grades="1, 2">Zingen en Swingen (1, 2)</div>
+                <form action="/add-activity/" method="post">
+                  <input type="hidden" name="school" value="Demo School">
+                  <input type="hidden" name="startdate" value="2024-09-05">
+                  <input type="hidden" name="enddate" value="2024-12-16">
+                  <input type="hidden" name="yeargroups" id="yeargroups" value="">
+                  <input type="hidden" name="weekday" value="{{ weekday }}">
+                  <input type="hidden" name="starttime" value="{{ starttime }}">
+                  <input type="hidden" name="endtime" value="{{ endtime }}">
+                  <button type="submit" class="bg-blue-100 text-blue-700 px-2 py-1 mt-2 rounded">toevoegen</button>
+                </form>
+              </td>
+              <td class="p-4 border border-gray-300">
+                <div class="activity bg-yellow-200 text-yellow-900 p-2 rounded mb-2" data-grades="3, 4, 5">Dans (3, 4, 5)</div>
+                <div class="activity bg-yellow-200 text-yellow-900 p-2 rounded mb-2" data-grades="3, 4, 5">Proefjes (3, 4, 5)</div>
+                <div class="activity bg-green-200 text-green-900 p-2 rounded mb-2" data-grades="6, 7, 8">Bijles Academie (6, 7, 8)</div>
+                <div class="activity bg-yellow-200 text-yellow-900 p-2 rounded mb-2" data-grades="3, 4, 5">FITBIZKIDS (3, 4, 5)</div>
+                <div class="activity bg-green-200 text-green-900 p-2 rounded mb-2" data-grades="6, 7, 8">Gezond Eten & Koken (6, 7, 8)</div>
+                <div class="activity bg-green-200 text-green-900 p-2 rounded mb-2" data-grades="6, 7, 8">Kickboksen (6, 7, 8)</div>
+                <div class="activity bg-green-200 text-green-900 p-2 rounded" data-grades="6, 7, 8">SF Space project (6, 7, 8)</div>
+                <form action="/add-activity/" method="post">
+                  <input type="hidden" name="school" value="Demo School">
+                  <input type="hidden" name="startdate" value="2024-09-05">
+                  <input type="hidden" name="enddate" value="2024-12-16">
+                  <input type="hidden" name="yeargroups" id="yeargroups" value="">
+                  <input type="hidden" name="weekday" value="{{ weekday }}">
+                  <input type="hidden" name="starttime" value="{{ starttime }}">
+                  <input type="hidden" name="endtime" value="{{ endtime }}">
+                  <button type="submit" class="bg-blue-100 text-blue-700 px-2 py-1 mt-2 rounded">toevoegen</button>
+                </form>
+              </td>
+              <td class="p-4 border border-gray-300">
+                <div class="activity bg-green-200 text-green-900 p-2 rounded mb-2" data-grades="6, 7, 8">Archeologie (6, 7, 8)</div>
+                <div class="activity bg-red-300 text-red-900 p-2 rounded mb-2" data-grades="1, 2">Creaclub (1, 2)</div>
+                <div class="activity bg-green-200 text-green-900 p-2 rounded mb-2" data-grades="6, 7, 8">Electro Lab (6, 7, 8)</div>
+                <div class="activity bg-yellow-200 text-yellow-900 p-2 rounded mb-2" data-grades="3, 4, 5">Gezond Eten & Koken (3, 4, 5)</div>
+                <div class="activity bg-yellow-200 text-yellow-900 p-2 rounded" data-grades="3, 4, 5">Percussie Ensemble Zuidoost (3, 4, 5)</div>
+                <form action="/add-activity/" method="post">
+                  <input type="hidden" name="school" value="Demo School">
+                  <input type="hidden" name="startdate" value="2024-09-05">
+                  <input type="hidden" name="enddate" value="2024-12-16">
+                  <input type="hidden" name="yeargroups" id="yeargroups" value="">
+                  <input type="hidden" name="weekday" value="{{ weekday }}">
+                  <input type="hidden" name="starttime" value="{{ starttime }}">
+                  <input type="hidden" name="endtime" value="{{ endtime }}">
+                  <button type="submit" class="bg-blue-100 text-blue-700 px-2 py-1 mt-2 rounded">toevoegen</button>
+                </form>
+              </td>
+              <td class="p-4 border border-gray-300">
+                <div class="activity bg-yellow-200 text-yellow-900 p-2 rounded mb-2" data-grades="3, 4, 5">Sieraden Maken (3, 4, 5)</div>
+                <div class="activity bg-green-200 text-green-900 p-2 rounded mb-2" data-grades="6, 7, 8">American Flag Football (6, 7, 8)</div>
+                <div class="activity bg-green-200 text-green-900 p-2 rounded mb-2" data-grades="6, 7, 8">Bijles Academie (6, 7, 8)</div>
+                <div class="activity bg-yellow-200 text-yellow-900 p-2 rounded mb-2" data-grades="3, 4, 5">Film en Fotografie (3, 4, 5)</div>
+                <div class="activity bg-yellow-200 text-yellow-900 p-2 rounded mb-2" data-grades="6, 7, 8">Gezond Eten & Koken (6, 7, 8)</div>
+                <div class="activity bg-red-300 text-red-900 p-2 rounded mb-2" data-grades="1, 2">Sport & Spel (1, 2)</div>
+                <div class="activity bg-yellow-200 text-yellow-900 p-2 rounded" data-grades="3, 4, 5">Stop - motion (3, 4, 5)</div>
+                <form action="/add-activity/" method="post">
+                  <input type="hidden" name="school" value="Demo School">
+                  <input type="hidden" name="startdate" value="2024-09-05">
+                  <input type="hidden" name="enddate" value="2024-12-16">
+                  <input type="hidden" name="yeargroups" id="yeargroups" value="">
+                  <input type="hidden" name="weekday" value="{{ weekday }}">
+                  <input type="hidden" name="starttime" value="{{ starttime }}">
+                  <input type="hidden" name="endtime" value="{{ endtime }}">
+                  <button type="submit" class="bg-blue-100 text-blue-700 px-2 py-1 mt-2 rounded">toevoegen</button>
+                </form>
+              </td>
+              <td class="p-4 border border-gray-300">
+                <form action="/add-activity/" method="post">
+                  <input type="hidden" name="school" value="Demo School">
+                  <input type="hidden" name="startdate" value="2024-09-05">
+                  <input type="hidden" name="enddate" value="2024-12-16">
+                  <input type="hidden" name="yeargroups" id="yeargroups" value="">
+                  <input type="hidden" name="weekday" value="{{ weekday }}">
+                  <input type="hidden" name="starttime" value="{{ starttime }}">
+                  <input type="hidden" name="endtime" value="{{ endtime }}">
+                  <button type="submit" class="bg-blue-100 text-blue-700 px-2 py-1 mt-2 rounded">toevoegen</button>
+                </form>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-4 border border-gray-300">14:30</td>
+              <td class="p-4 border border-gray-300">
+                <form action="/add-activity/" method="post">
+                  <input type="hidden" name="school" value="Demo School">
+                  <input type="hidden" name="startdate" value="2024-09-05">
+                  <input type="hidden" name="enddate" value="2024-12-16">
+                  <input type="hidden" name="yeargroups" id="yeargroups" value="">
+                  <input type="hidden" name="weekday" value="{{ weekday }}">
+                  <input type="hidden" name="starttime" value="{{ starttime }}">
+                  <input type="hidden" name="endtime" value="{{ endtime }}">
+                  <button type="submit" class="bg-blue-100 text-blue-700 px-2 py-1 mt-2 rounded">toevoegen</button>
+                </form>
+              </td>
+              <td class="p-4 border border-gray-300">
+                <form action="/add-activity/" method="post">
+                  <input type="hidden" name="school" value="Demo School">
+                  <input type="hidden" name="startdate" value="2024-09-05">
+                  <input type="hidden" name="enddate" value="2024-12-16">
+                  <input type="hidden" name="yeargroups" id="yeargroups" value="">
+                  <input type="hidden" name="weekday" value="{{ weekday }}">
+                  <input type="hidden" name="starttime" value="{{ starttime }}">
+                  <input type="hidden" name="endtime" value="{{ endtime }}">
+                  <button type="submit" class="bg-blue-100 text-blue-700 px-2 py-1 mt-2 rounded">toevoegen</button>
+                </form>
+              </td>
+              <td class="p-4 border border-gray-300">
+                <form action="/add-activity/" method="post">
+                  <input type="hidden" name="school" value="Demo School">
+                  <input type="hidden" name="startdate" value="2024-09-05">
+                  <input type="hidden" name="enddate" value="2024-12-16">
+                  <input type="hidden" name="yeargroups" id="yeargroups" value="">
+                  <input type="hidden" name="weekday" value="{{ weekday }}">
+                  <input type="hidden" name="starttime" value="{{ starttime }}">
+                  <input type="hidden" name="endtime" value="{{ endtime }}">
+                  <button type="submit" class="bg-blue-100 text-blue-700 px-2 py-1 mt-2 rounded">toevoegen</button>
+                </form>
+              </td>
+              <td class="p-4 border border-gray-300">
+                <form action="/add-activity/" method="post">
+                  <input type="hidden" name="school" value="Demo School">
+                  <input type="hidden" name="startdate" value="2024-09-05">
+                  <input type="hidden" name="enddate" value="2024-12-16">
+                  <input type="hidden" name="yeargroups" id="yeargroups" value="">
+                  <input type="hidden" name="weekday" value="{{ weekday }}">
+                  <input type="hidden" name="starttime" value="{{ starttime }}">
+                  <input type="hidden" name="endtime" value="{{ endtime }}">
+                  <button type="submit" class="bg-blue-100 text-blue-700 px-2 py-1 mt-2 rounded">toevoegen</button>
+                </form>
+              </td>
+              <td class="p-4 border border-gray-300">
+                <form action="/add-activity/" method="post">
+                  <input type="hidden" name="school" value="Demo School">
+                  <input type="hidden" name="startdate" value="2024-09-05">
+                  <input type="hidden" name="enddate" value="2024-12-16">
+                  <input type="hidden" name="yeargroups" id="yeargroups" value="">
+                  <input type="hidden" name="weekday" value="{{ weekday }}">
+                  <input type="hidden" name="starttime" value="{{ starttime }}">
+                  <input type="hidden" name="endtime" value="{{ endtime }}">
+                  <button type="submit" class="bg-blue-100 text-blue-700 px-2 py-1 mt-2 rounded">toevoegen</button>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
