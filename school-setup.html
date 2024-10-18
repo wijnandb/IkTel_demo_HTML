@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Management Demo Interface</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .holiday-list .delete-button {
+            color: red;
+            cursor: pointer;
+        }
+        .form-check-input {
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="container my-5">
+    <h2>Holidays</h2>
+    <div class="holiday-list mb-4">
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Herfstvakantie - 26/10/2024 to 03/11/2024
+                <span class="delete-button">&#10060;</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Kerstvakantie - 21/12/2024 to 05/01/2025
+                <span class="delete-button">&#10060;</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Voorjaarsvakantie - 15/02/2025 to 23/02/2025
+                <span class="delete-button">&#10060;</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Meivakantie - 26/04/2025 to 04/05/2025
+                <span class="delete-button">&#10060;</n></li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Zomervakantie - 12/07/2025 to 24/08/2025
+                <span class="delete-button">&#10060;</span>
+            </li>
+        </ul>
+    </div>
+
+    <h2>School-Specific Holidays ("Studiedagen")</h2>
+    <form class="mb-4">
+        <div class="form-row">
+            <div class="col-md-4 mb-3">
+                <label for="schoolHolidayName">Holiday Name</label>
+                <input type="text" class="form-control" id="schoolHolidayName" placeholder="e.g. Studiedag">
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="startDate">Start Date</label>
+                <input type="date" class="form-control" id="startDate" onchange="updateEndDate()">
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="endDate">End Date</label>
+                <input type="date" class="form-control" id="endDate">
+            </div>
+            <div class="col-md-1 mb-3 align-self-end">
+                <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </form>
+
+    <h2>Periods</h2>
+    <div class="mb-4">
+        <div id="periodInputs">
+            <div class="form-row">
+                <div class="col-md-4 mb-3">
+                    <label for="period1Name">Period Name</label>
+                    <input type="text" class="form-control" id="period1Name" placeholder="e.g. Period 1">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="period1Start">Start Date</label>
+                    <input type="date" class="form-control" id="period1Start">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="period1End">End Date</label>
+                    <input type="date" class="form-control" id="period1End">
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary mb-3" onclick="addPeriod()">Add Period</button>
+    </div>
+
+    <h2>Timeslots (Starting Times per Weekday)</h2>
+    <table class="table table-bordered mb-4" id="timeslotTable">
+        <thead>
+            <tr>
+                <th>Start Time</th>
+                <th class="text-center">Monday</th>
+                <th class="text-center">Tuesday</th>
+                <th class="text-center">Wednesday</th>
+                <th class="text-center">Thursday</th>
+                <th class="text-center">Friday</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Example of added timeslots -->
+            <tr>
+                <td>08:30 AM</td>
+                <td class="text-center">✔</td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+            </tr>
+            <tr>
+                <td>09:00 AM</td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center"></td>
+            </tr>
+        </tbody>
+    </table>
+    <form>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Add Start Time</th>
+                    <th class="text-center">Monday</th>
+                    <th class="text-center">Tuesday</th>
+                    <th class="text-center">Wednesday</th>
+                    <th class="text-center">Thursday</th>
+                    <th class="text-center">Friday</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input type="time" class="form-control" id="startingTime">
+                    </td>
+                    <td class="text-center"><input type="checkbox" class="form-check-input" id="mondayCheckbox"></td>
+                    <td class="text-center"><input type="checkbox" class="form-check-input" id="tuesdayCheckbox"></td>
+                    <td class="text-center"><input type="checkbox" class="form-check-input" id="wednesdayCheckbox"></td>
+                    <td class="text-center"><input type="checkbox" class="form-check-input" id="thursdayCheckbox"></td>
+                    <td class="text-center"><input type="checkbox" class="form-check-input" id="fridayCheckbox"></td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-primary mb-3" onclick="addTimeslot()">Add Timeslot</button>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.querySelectorAll('.delete-button').forEach(button => {
+        button.addEventListener('click', function () {
+            this.parentElement.remove();
+        });
+    });
+
+    function updateEndDate() {
+        const startDate = document.getElementById('startDate').value;
+        document.getElementById('endDate').value = startDate;
+    }
+
+    function addPeriod() {
+        const periodInputs = document.createElement('div');
+        periodInputs.classList.add('form-row');
+        periodInputs.innerHTML = `
+            <div class="col-md-4 mb-3">
+                <label>Period Name</label>
+                <input type="text" class="form-control" placeholder="e.g. Period 2">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Start Date</label>
+                <input type="date" class="form-control">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>End Date</label>
+                <input type="date" class="form-control">
+            </div>
+        `;
+        document.getElementById('periodInputs').appendChild(periodInputs);
+    }
+
+    function addTimeslot() {
+        const time = document.getElementById('startingTime').value;
+        const weekdays = [
+            document.getElementById('mondayCheckbox').checked ? '✔' : '',
+            document.getElementById('tuesdayCheckbox').checked ? '✔' : '',
+            document.getElementById('wednesdayCheckbox').checked ? '✔' : '',
+            document.getElementById('thursdayCheckbox').checked ? '✔' : '',
+            document.getElementById('fridayCheckbox').checked ? '✔' : ''
+        ];
+
+        if (time) {
+            const tableRow = document.createElement('tr');
+            tableRow.innerHTML = `
+                <td>${time}</td>
+                <td class="text-center">${weekdays[0]}</td>
+                <td class="text-center">${weekdays[1]}</td>
+                <td class="text-center">${weekdays[2]}</td>
+                <td class="text-center">${weekdays[3]}</td>
+                <td class="text-center">${weekdays[4]}</td>
+            `;
+            document.querySelector('#timeslotTable tbody').appendChild(tableRow);
+        }
+    }
+</script>
+</body>
+</html>
