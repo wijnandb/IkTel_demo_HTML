@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Activity Enrollment</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        table {
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .enrolled {
+            background-color: #4CAF50 !important;
+            color: white;
+        }
+        .disabled {
+            background-color: #f2f2f2 !important;
+            color: grey;
+            pointer-events: none;
+        }
+        .clickable {
+            cursor: pointer;
+        }
+        .badge {
+            background-color: #007bff;
+            color: white;
+        }
+        .nav-tabs {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body class="container">
+
+<h1 class="my-4">Enroll Students in Activities</h1>
+
+<!-- Days of the Week Navigation -->
+<ul class="nav nav-tabs" id="daysTabs">
+    <!-- Dynamic Days -->
+</ul>
+
+<table class="table table-bordered" id="enrollmentTable">
+    <thead>
+        <tr>
+            <th>Student</th>
+            <!-- Time slots will go here -->
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Students and activities will go here -->
+    </tbody>
+</table>
+
+<script>
+    // Array of students with their unique 4-digit codes
+    const students = [
+        { name: 'John Doe', code: '1001', enrollments: 0 },
+        { name: 'Jane Smith', code: '1002', enrollments: 0 },
+        { name: 'Michael Brown', code: '1003', enrollments: 0 }
+    ];
+
+    // Activities by day, with unique integer IDs and time slots
+    const activitiesByDay = {
+        'Monday': [
+            { id: 1, name: 'Math Club', time: '10:00 AM', maxEnrollments: 12, enrollments: 0 },
+            { id: 2, name: 'Science Lab', time: '10:00 AM', maxEnrollments: 12, enrollments: 0 },
+            { id: 3, name: 'Art Class', time: '11:00 AM', maxEnrollments: 12, enrollments: 0 }
+        ],
+        'Tuesday': [
+            { id: 4, name: 'History Workshop', time: '10:00 AM', maxEnrollments: 12, enrollments: 0 },
+            { id: 5, name: 'Computer Lab', time: '11:00 AM', maxEnrollments: 12, enrollments: 0 }
+        ]
+    };
+
+    let currentDay = 'Monday';
+    const studentEnrollments = {};
+
+    // Initialize enrollments to 0 for each student
+    students.forEach(student => {
+        studentEnrollments[student.code] = {};
+    });
+
+    const tableHead = document.getElementById('enrollmentTable').getElementsByTagName('thead')[0];
+    const tableBody = document.getElementById('enrollmentTable').getElementsByTagName('tbody')[0];
+    const daysTabs = document.getElementById('daysTabs');
+
+    function populateTable(day) {
+        currentDay = day;
+        const activities = activitiesByDay[day];
+
+        // Group activities by time
+        const groupedActivitiesByTime = groupActivitiesByTime(activities);
+
+        // Clear table head and body
+        tableHead.rows[0].innerHTML = '<th>Student</th>';
+        tableBody.innerHTML = '';
+
+        // Populate time slots in the first row (headers)
+        Object.keys(groupedActivitiesByTime).forEach(timeSlot => {
+            const th = document.createElement('th');
+            th.innerText = timeSlot;
+            tableHead.rows[0].appendChild(th);
+        });
+
+        // Populate students and activities under the correct time slots
+        students.forEach(student => {
+            const studentRow = document.createElement('tr');
+
+            // Create a cell for the student's name and add the badge for number of enrollments
+            const studentCell = document.createElement('td');
+            studentCell.innerHTML = `${student.name} <span class="badge" id="student-badge-${student.code}">${student.enrollments}</span>`;
+            studentRow.appendChild(studentCell);
+
+            // For each time slot, add activities for the student under the corresponding time
+            Object.keys(groupedActivitiesByTime).forEach(timeSlot => {
+                const timeActivities = groupedActivitiesByTime[timeSlot];
+                const activityCell = document.createElement('td');
+
+                timeActivities.forEach(activity => {
+                    const activityDiv = document.createElement('div');
+                    const cellId = `cell-${student.code}-${activity.id}`;
+                    activityDiv.id = cellId;
+                    activityDiv.classList.add('clickable');
+                    activityDiv.setAttribute('data-student-code', student.code);
+                    activityDiv.setAttribute('data-activity-id', activity.id);
+                    activityDiv.setAttribute('data-time-slot', timeSlot);
+                    activityDiv.innerHTML = `${activity.name} <span class="badge" id="activity-badge-${activity.id}">${activity.enrollments}</span> - Enroll`;
+                    activityDiv.addEventListener('click', () => toggleEnrollment(activityDiv, student.code, activity.id, timeSlot));
+                    activityCell.appendChild(activityDiv);
+                });
+
+                studentRow.appendChild(activityCell);
+            });
+
+            tableBody.appendChild(studentRow);
+        });
+    }
+
+    function groupActivitiesByTime(activities) {
+        const grouped = {};
+        activities.forEach(activity => {
+            if (!grouped[activity.time]) {
+                grouped[activity.time] = [];
+            }
+            grouped[activity.time].push(activity);
+        });
+        return grouped;
+    }
+
+    function toggleEnrollment(cell, studentCode, activityId, timeSlot) {
+        const activity = activitiesByDay[currentDay].find(act => act.id == activityId);
+        const student = students.find(stu => stu.code == studentCode);
+
+        // Check if the activity is already enrolled
+        if (cell.classList.contains('enrolled')) {
+            // Unenroll the student
+            cell.innerHTML = `${activity.name} <span class="badge" id="activity-badge-${activity.id}">${activity.enrollments}</span> - Enroll`;
+            cell.classList.remove('enrolled');
+            activity.enrollments--;
+            studentEnrollments[studentCode][timeSlot] = undefined;
+            student.enrollments--;
+
+            // Re-enable other activities in the same time slot
+            enableOtherActivities(studentCode, timeSlot);
+
+        } else {
+            // Enroll the student
+            cell.innerHTML = `${activity.name} <span class="badge" id="activity-badge-${activity.id}">${activity.enrollments + 1}</span> - Enrolled`;
+            cell.classList.add('enrolled');
+            activity.enrollments++;
+            studentEnrollments[studentCode][timeSlot] = activityId;
+            student.enrollments++;
+
+            // Disable other activities in the same time slot
+            disableOtherActivities(studentCode, timeSlot, activityId);
+        }
+
+        // Update badges for student and activity
+        updateBadges(studentCode, activityId);
+    }
+
+    function disableOtherActivities(studentCode, timeSlot, activityId) {
+        const activities = document.querySelectorAll(`[data-student-code="${studentCode}"][data-time-slot="${timeSlot}"]`);
+        activities.forEach(activity => {
+            if (activity.getAttribute('data-activity-id') != activityId) {
+                activity.classList.add('disabled');
+            }
+        });
+    }
+
+    function enableOtherActivities(studentCode, timeSlot) {
+        const activities = document.querySelectorAll(`[data-student-code="${studentCode}"][data-time-slot="${timeSlot}"]`);
+        activities.forEach(activity => {
+            activity.classList.remove('disabled');
+        });
+    }
+
+    function updateBadges(studentCode, activityId) {
+        // Update student badge
+        const student = students.find(stu => stu.code == studentCode);
+        const studentBadge = document.getElementById(`student-badge-${studentCode}`);
+        studentBadge.innerText = student.enrollments;
+
+        // Update activity badge
+        const activity = activitiesByDay[currentDay].find(act => act.id == activityId);
+        const activityBadge = document.getElementById(`activity-badge-${activity.id}`);
+        activityBadge.innerText = activity.enrollments;
+    }
+
+    // Handle dynamic day navigation and display only days with activities
+    function populateDays() {
+        daysTabs.innerHTML = '';
+        Object.keys(activitiesByDay).forEach(day => {
+            const li = document.createElement('li');
+            li.classList.add('nav-item');
+            const a = document.createElement('a');
+            a.classList.add('nav-link');
+            a.href = '#';
+            a.innerText = day;
+            if (day === currentDay) {
+                a.classList.add('active');
+            }
+            a.setAttribute('data-day', day);
+            a.addEventListener('click', function (event) {
+                event.preventDefault();
+                document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+                this.classList.add('active');
+                populateTable(day);
+            });
+            li.appendChild(a);
+            daysTabs.appendChild(li);
+        });
+    }
+
+    // Initial population of days and table
+    populateDays();
+    populateTable(currentDay);
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

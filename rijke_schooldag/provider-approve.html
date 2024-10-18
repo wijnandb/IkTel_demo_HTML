@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZAZA Kitchen Schedule Demo</title>
+    <style>
+        table {
+            width: 80%;
+            margin: auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 15px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        td.slot {
+            background-color: #e0f7fa;
+            cursor: pointer;
+        }
+        td.hidden {
+            background-color: #f0f0f0;
+            color: #ccc;
+        }
+        .filter {
+            cursor: pointer;
+            margin: 5px;
+            padding: 5px 10px;
+            border: 1px solid #333;
+            display: inline-block;
+        }
+        .filter.selected {
+            background-color: #ccc;
+        }
+    </style>
+    <script>
+        function applyFilters() {
+            const selectedFilters = document.querySelectorAll('.filter.selected');
+            const selectedValues = Array.from(selectedFilters).map(filter => filter.getAttribute('data-value'));
+            const slots = document.querySelectorAll('.slot');
+    
+            slots.forEach(slot => {
+                const slotText = slot.innerText;
+                const matches = selectedValues.every(value => slotText.includes(value));
+                if (matches || selectedValues.length === 0) {
+                    slot.classList.remove('hidden');
+                } else {
+                    slot.classList.add('hidden');
+                }
+            });
+        }
+    
+        function toggleFilter(event) {
+            const clickedFilter = event.target;
+            const filterType = clickedFilter.parentNode; // Get the container of the clicked filter
+            const filtersInSameGroup = filterType.querySelectorAll('.filter');
+    
+            // Check if the clicked filter is already selected
+            if (clickedFilter.classList.contains('selected')) {
+                // Deselect it if it's already selected
+                clickedFilter.classList.remove('selected');
+            } else {
+                // Deselect all filters in the same group
+                filtersInSameGroup.forEach(filter => filter.classList.remove('selected'));
+    
+                // Select the clicked filter
+                clickedFilter.classList.add('selected');
+            }
+    
+            applyFilters();
+        }
+    </script>
+    
+    
+</head>
+<body>
+    <h2 style="text-align: center;">ZAZA Kitchen Schedule Demo</h2>
+    <div style="text-align: center;">
+        <div><strong>Schools:</strong></div>
+        <div class="filter" data-value="Greenfield High" onclick="toggleFilter(event)">School: Greenfield High</div>
+        <div class="filter" data-value="Sunnyvale Academy" onclick="toggleFilter(event)">School: Sunnyvale Academy</div>
+        <div class="filter" data-value="Lakeside School" onclick="toggleFilter(event)">School: Lakeside School</div>
+    </div>
+    <div style="text-align: center;">
+        <div><strong>Teachers:</strong></div>
+        <div class="filter" data-value="Mr. Smith" onclick="toggleFilter(event)">Teacher: Mr. Smith</div>
+        <div class="filter" data-value="Ms. Johnson" onclick="toggleFilter(event)">Teacher: Ms. Johnson</div>
+    </div>
+    <div style="text-align: center;">
+        <div><strong>Yeargroups:</strong></div>
+        <div class="filter" data-value="Yeargroups: 7, 8" onclick="toggleFilter(event)">Yeargroups: 7, 8</div>
+        <div class="filter" data-value="Yeargroups: 9, 10" onclick="toggleFilter(event)">Yeargroups: 9, 10</div>
+        <div class="filter" data-value="Yeargroups: 11, 12" onclick="toggleFilter(event)">Yeargroups: 11, 12</div>
+    </div>
+    <div style="text-align: center;">
+        <div><strong>Status:</strong></div>
+        <div class="filter" data-value="Status: Applied" onclick="toggleFilter(event)">Applied</div>
+        <div class="filter" data-value="Status: Declined" onclick="toggleFilter(event)">Declined</div>
+        <div class="filter" data-value="Status: Accepted" onclick="toggleFilter(event)">Accepted</div>
+        <div class="filter" data-value="Status: Open" onclick="toggleFilter(event)">Open</div>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>09:00</td>
+                <td></td>
+                <td class="slot">Gezond Eten & Koken<br>School: Greenfield High<br>Teacher: Mr. Smith<br>Yeargroups: 7, 8<br>Status: Accepted</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>10:00</td>
+                <td></td>
+                <td class="slot">Gezond Eten & Koken<br>School: Sunnyvale Academy<br>Yeargroups: 9, 10<br>Status: Open</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>10:30</td>
+                <td></td>
+                <td></td>
+                <td class="slot">Gezond Eten & Koken<br>School: Lakeside School<br>Teacher: Ms. Johnson<br>Yeargroups: 11, 12<br>Status: Declined</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>14:00</td>
+                <td></td>
+                <td class="slot">Gezond Eten & Koken<br>School: Greenfield High<br>Yeargroups: 7, 8<br>Status: Applied</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>14:15</td>
+                <td></td>
+                <td class="slot">Gezond Eten & Koken<br>School: Sunnyvale Academy<br>Yeargroups: 9, 10<br>Status: Open</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>15:00</td>
+                <td></td>
+                <td class="slot">Gezond Eten & Koken<br>School: Lakeside School<br>Teacher: Mr. Smith<br>Yeargroups: 11, 12<br>Status: Accepted</td>
+                <td></td>
+                <td class="slot">Gezond Eten & Koken<br>School: Greenfield High<br>Yeargroups: 7, 8<br>Status: Applied</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>15:30</td>
+                <td></td>
+                <td class="slot">Gezond Eten & Koken<br>School: Sunnyvale Academy<br>Yeargroups: 9, 10<br>Status: Open</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>16:00</td>
+                <td></td>
+                <td class="slot">Gezond Eten & Koken<br>School: Lakeside School<br>Yeargroups: 11, 12<br>Status: Declined</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
+
