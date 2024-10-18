@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZAZA Kitchen Schedule Demo</title>
     <style>
+        body {
+            text-align: center;
+        }
         table {
             width: 80%;
             margin: auto;
@@ -19,7 +22,6 @@
             background-color: #f2f2f2;
         }
         td.slot {
-            background-color: #e0f7fa;
             cursor: pointer;
         }
         td.hidden {
@@ -35,6 +37,31 @@
         }
         .filter.selected {
             background-color: #ccc;
+        }
+
+        /* School borders */
+        .greenfield-high {
+            border: 2px solid #4caf50; /* Green */
+        }
+        .sunnyvale-academy {
+            border: 2px solid #ff9800; /* Orange */
+        }
+        .lakeside-school {
+            border: 2px solid #2196f3; /* Blue */
+        }
+
+        /* Status background colors */
+        .status-applied, .filter[data-value="Status: Applied"].selected {
+            background-color: #ffecb3; /* Light Yellow */
+        }
+        .status-accepted, .filter[data-value="Status: Accepted"].selected {
+            background-color: #c8e6c9; /* Light Green */
+        }
+        .status-declined, .filter[data-value="Status: Declined"].selected {
+            background-color: #ffcdd2; /* Light Red */
+        }
+        .status-open, .filter[data-value="Status: Open"].selected {
+            background-color: #e0f7fa; /* Light Cyan */
         }
     </style>
     <script>
@@ -56,47 +83,64 @@
     
         function toggleFilter(event) {
             const clickedFilter = event.target;
-            const filterType = clickedFilter.parentNode; // Get the container of the clicked filter
+            const filterType = clickedFilter.parentNode;
             const filtersInSameGroup = filterType.querySelectorAll('.filter');
     
-            // Check if the clicked filter is already selected
             if (clickedFilter.classList.contains('selected')) {
-                // Deselect it if it's already selected
                 clickedFilter.classList.remove('selected');
             } else {
-                // Deselect all filters in the same group
                 filtersInSameGroup.forEach(filter => filter.classList.remove('selected'));
-    
-                // Select the clicked filter
                 clickedFilter.classList.add('selected');
             }
     
             applyFilters();
         }
+
+        function applyForSlot(slotElement) {
+            const teacherOptions = ["Mr. Smith", "Ms. Johnson"];
+            const teacherSelect = document.createElement("select");
+            teacherOptions.forEach(teacher => {
+                const option = document.createElement("option");
+                option.value = teacher;
+                option.textContent = teacher;
+                teacherSelect.appendChild(option);
+            });
+
+            const confirmButton = document.createElement("button");
+            confirmButton.textContent = "Confirm";
+            confirmButton.onclick = function() {
+                const selectedTeacher = teacherSelect.value;
+                slotElement.innerHTML = `Gezond Eten & Koken<br>School: ${slotElement.dataset.school}<br>Teacher: ${selectedTeacher}<br>Yeargroups: ${slotElement.dataset.yeargroups}<br>Status: Applied`;
+                slotElement.classList.remove("status-open");
+                slotElement.classList.add("status-applied");
+            };
+
+            slotElement.innerHTML = "Select a Teacher: ";
+            slotElement.appendChild(teacherSelect);
+            slotElement.appendChild(confirmButton);
+        }
     </script>
-    
-    
 </head>
 <body>
-    <h2 style="text-align: center;">ZAZA Kitchen Schedule Demo</h2>
-    <div style="text-align: center;">
+    <h2>ZAZA Kitchen Schedule Demo</h2>
+    <div>
         <div><strong>Schools:</strong></div>
         <div class="filter" data-value="Greenfield High" onclick="toggleFilter(event)">School: Greenfield High</div>
         <div class="filter" data-value="Sunnyvale Academy" onclick="toggleFilter(event)">School: Sunnyvale Academy</div>
         <div class="filter" data-value="Lakeside School" onclick="toggleFilter(event)">School: Lakeside School</div>
     </div>
-    <div style="text-align: center;">
+    <div>
         <div><strong>Teachers:</strong></div>
         <div class="filter" data-value="Mr. Smith" onclick="toggleFilter(event)">Teacher: Mr. Smith</div>
         <div class="filter" data-value="Ms. Johnson" onclick="toggleFilter(event)">Teacher: Ms. Johnson</div>
     </div>
-    <div style="text-align: center;">
+    <div>
         <div><strong>Yeargroups:</strong></div>
         <div class="filter" data-value="Yeargroups: 7, 8" onclick="toggleFilter(event)">Yeargroups: 7, 8</div>
         <div class="filter" data-value="Yeargroups: 9, 10" onclick="toggleFilter(event)">Yeargroups: 9, 10</div>
         <div class="filter" data-value="Yeargroups: 11, 12" onclick="toggleFilter(event)">Yeargroups: 11, 12</div>
     </div>
-    <div style="text-align: center;">
+    <div>
         <div><strong>Status:</strong></div>
         <div class="filter" data-value="Status: Applied" onclick="toggleFilter(event)">Applied</div>
         <div class="filter" data-value="Status: Declined" onclick="toggleFilter(event)">Declined</div>
@@ -118,7 +162,7 @@
             <tr>
                 <td>09:00</td>
                 <td></td>
-                <td class="slot">Gezond Eten & Koken<br>School: Greenfield High<br>Teacher: Mr. Smith<br>Yeargroups: 7, 8<br>Status: Accepted</td>
+                <td class="slot greenfield-high status-accepted">Gezond Eten & Koken<br>School: Greenfield High<br>Teacher: Mr. Smith<br>Yeargroups: 7, 8<br>Status: Accepted</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -126,7 +170,11 @@
             <tr>
                 <td>10:00</td>
                 <td></td>
-                <td class="slot">Gezond Eten & Koken<br>School: Sunnyvale Academy<br>Yeargroups: 9, 10<br>Status: Open</td>
+                <td class="slot sunnyvale-academy status-open" data-school="Sunnyvale Academy" data-yeargroups="9, 10">
+                    Gezond Eten & Koken<br>School: Sunnyvale Academy<br>Yeargroups: 9, 10<br>Status: Open
+                    <br><button onclick="applyForSlot(this.parentElement)">Apply</button>
+                    <button onclick="this.parentElement.classList.add('hidden')">Decline</button>
+                </td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -135,14 +183,14 @@
                 <td>10:30</td>
                 <td></td>
                 <td></td>
-                <td class="slot">Gezond Eten & Koken<br>School: Lakeside School<br>Teacher: Ms. Johnson<br>Yeargroups: 11, 12<br>Status: Declined</td>
+                <td class="slot lakeside-school status-declined">Gezond Eten & Koken<br>School: Lakeside School<br>Yeargroups: 11, 12<br>Status: Declined</td>
                 <td></td>
                 <td></td>
             </tr>
             <tr>
                 <td>14:00</td>
                 <td></td>
-                <td class="slot">Gezond Eten & Koken<br>School: Greenfield High<br>Yeargroups: 7, 8<br>Status: Applied</td>
+                <td class="slot greenfield-high status-applied">Gezond Eten & Koken<br>School: Greenfield High<br>Teacher: Mr. Smith<br>Yeargroups: 7, 8<br>Status: Applied</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -150,7 +198,11 @@
             <tr>
                 <td>14:15</td>
                 <td></td>
-                <td class="slot">Gezond Eten & Koken<br>School: Sunnyvale Academy<br>Yeargroups: 9, 10<br>Status: Open</td>
+                <td class="slot sunnyvale-academy status-open" data-school="Sunnyvale Academy" data-yeargroups="9, 10">
+                    Gezond Eten & Koken<br>School: Sunnyvale Academy<br>Yeargroups: 9, 10<br>Status: Open
+                    <br><button onclick="applyForSlot(this.parentElement)">Apply</button>
+                    <button onclick="this.parentElement.classList.add('hidden')">Decline</button>
+                </td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -158,15 +210,19 @@
             <tr>
                 <td>15:00</td>
                 <td></td>
-                <td class="slot">Gezond Eten & Koken<br>School: Lakeside School<br>Teacher: Mr. Smith<br>Yeargroups: 11, 12<br>Status: Accepted</td>
+                <td class="slot lakeside-school status-accepted">Gezond Eten & Koken<br>School: Lakeside School<br>Teacher: Mr. Smith<br>Yeargroups: 11, 12<br>Status: Accepted</td>
                 <td></td>
-                <td class="slot">Gezond Eten & Koken<br>School: Greenfield High<br>Yeargroups: 7, 8<br>Status: Applied</td>
+                <td class="slot greenfield-high status-applied">Gezond Eten & Koken<br>School: Greenfield High<br>Teacher: Mr. Smith<br>Yeargroups: 7, 8<br>Status: Applied</td>
                 <td></td>
             </tr>
             <tr>
                 <td>15:30</td>
                 <td></td>
-                <td class="slot">Gezond Eten & Koken<br>School: Sunnyvale Academy<br>Yeargroups: 9, 10<br>Status: Open</td>
+                <td class="slot sunnyvale-academy status-open" data-school="Sunnyvale Academy" data-yeargroups="9, 10">
+                    Gezond Eten & Koken<br>School: Sunnyvale Academy<br>Yeargroups: 9, 10<br>Status: Open
+                    <br><button onclick="applyForSlot(this.parentElement)">Apply</button>
+                    <button onclick="this.parentElement.classList.add('hidden')">Decline</button>
+                </td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -174,7 +230,7 @@
             <tr>
                 <td>16:00</td>
                 <td></td>
-                <td class="slot">Gezond Eten & Koken<br>School: Lakeside School<br>Yeargroups: 11, 12<br>Status: Declined</td>
+                <td class="slot lakeside-school status-declined">Gezond Eten & Koken<br>School: Lakeside School<br>Yeargroups: 11, 12<br>Status: Declined</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -183,4 +239,3 @@
     </table>
 </body>
 </html>
-
