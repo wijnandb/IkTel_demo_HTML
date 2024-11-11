@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Activities, Teachers & Activity Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        td {
+            background-color: #f9f9f9;
+        }
+        .amount {
+            font-weight: bold;
+            color: #2e8b57;
+        }
+        .teacher-info {
+            background-color: #f1f1f1;
+            display: none;
+        }
+        .teacher-info td {
+            background-color: #ffffff;
+        }
+        .activity-info {
+            display: none;
+            background-color: #e9f7df;
+        }
+        .company-row {
+            cursor: pointer;
+        }
+        .teacher-row {
+            cursor: pointer;
+            font-weight: bold;
+            color: #0066cc;
+        }
+        .teacher-row:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Company Activities, Teachers & Activity Details</h1>
+
+    <!-- Company Overview Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Company</th>
+                <th># of Activities</th>
+                <th>Amount (in €)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- GlobalTech Solutions -->
+            <tr class="company-row" onclick="toggleTeacherInfo('globalTech')">
+                <td>GlobalTech Solutions</td>
+                <td>5</td>
+                <td class="amount">€3,200</td>
+            </tr>
+            <tr class="teacher-info" id="globalTech">
+                <td colspan="3">
+                    <table>
+                        <tbody>
+                            <tr class="teacher-row" onclick="toggleActivityDetails('aliceJohnson')">
+                                <td>Alice Johnson</td>
+                                <td>2</td>
+                                <td class="amount">€1,500</td>
+                            </tr>
+                            <tr class="activity-info" id="aliceJohnson">
+                                <td colspan="3">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>Web Development</td>
+                                                <td>Tech Academy</td>
+                                                <td>Monday</td>
+                                                <td>10:00 AM - 12:00 PM</td>
+                                                <td>10</td>
+                                                <td class="amount">€1,000</td>
+                                            </tr>
+                                            <tr>
+                                                <td>AI Fundamentals</td>
+                                                <td>Future School</td>
+                                                <td>Wednesday</td>
+                                                <td>1:00 PM - 3:00 PM</td>
+                                                <td>5</td>
+                                                <td class="amount">€500</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr class="teacher-row" onclick="toggleActivityDetails('markSmith')">
+                                <td>Mark Smith</td>
+                                <td>2</td>
+                                <td class="amount">€1,200</td>
+                            </tr>
+                            <tr class="activity-info" id="markSmith">
+                                <td colspan="3">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>Cloud Computing</td>
+                                                <td>Tech Academy</td>
+                                                <td>Tuesday</td>
+                                                <td>11:00 AM - 1:00 PM</td>
+                                                <td>8</td>
+                                                <td class="amount">€800</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Data Analysis</td>
+                                                <td>Future School</td>
+                                                <td>Friday</td>
+                                                <td>2:00 PM - 4:00 PM</td>
+                                                <td>5</td>
+                                                <td class="amount">€400</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr class="teacher-row" onclick="toggleActivityDetails('sarahWilliams')">
+                                <td>Sarah Williams</td>
+                                <td>1</td>
+                                <td class="amount">€500</td>
+                            </tr>
+                            <tr class="activity-info" id="sarahWilliams">
+                                <td colspan="3">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>JavaScript Basics</td>
+                                                <td>Future School</td>
+                                                <td>Monday</td>
+                                                <td>9:00 AM - 11:00 AM</td>
+                                                <td>5</td>
+                                                <td class="amount">€500</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+
+            <!-- TechWorld Innovations -->
+            <tr class="company-row" onclick="toggleTeacherInfo('techWorld')">
+                <td>TechWorld Innovations</td>
+                <td>5</td>
+                <td class="amount">€2,750</td>
+            </tr>
+            <tr class="teacher-info" id="techWorld">
+                <td colspan="3">
+                    <table>
+                        <tbody>
+                            <tr class="teacher-row" onclick="toggleActivityDetails('jamesTaylor')">
+                                <td>James Taylor</td>
+                                <td>2</td>
+                                <td class="amount">€1,000</td>
+                            </tr>
+                            <tr class="activity-info" id="jamesTaylor">
+                                <td colspan="3">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>Networking Fundamentals</td>
+                                                <td>Global School</td>
+                                                <td>Monday</td>
+                                                <td>9:00 AM - 11:00 AM</td>
+                                                <td>6</td>
+                                                <td class="amount">€600</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Cloud Storage</td>
+                                                <td>Tech Academy</td>
+                                                <td>Thursday</td>
+                                                <td>3:00 PM - 5:00 PM</td>
+                                                <td>4</td>
+                                                <td class="amount">€400</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr class="teacher-row" onclick="toggleActivityDetails('natalieHarris')">
+                                <td>Natalie Harris</td>
+                                <td>2</td>
+                                <td class="amount">€1,500</td>
+                            </tr>
+                            <tr class="activity-info" id="natalieHarris">
+                                <td colspan="3">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>Cybersecurity</td>
+                                                <td>Global School</td>
+                                                <td>Tuesday</td>
+                                                <td>10:00 AM - 12:00 PM</td>
+                                                <td>6</td>
+                                                <td class="amount">€900</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Digital Transformation</td>
+                                                <td>Tech Academy</td>
+                                                <td>Friday</td>
+                                                <td>1:00 PM - 3:00 PM</td>
+                                                <td>4</td>
+                                                <td class="amount">€600</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr class="teacher-row" onclick="toggleActivityDetails('oliviaMoore')">
+                                <td>Olivia Moore</td>
+                                <td>1</td>
+                                <td class="amount">€250</td>
+                            </tr>
+                            <tr class="activity-info" id="oliviaMoore">
+                                <td colspan="3">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>Web Design</td>
+                                                <td>Design Academy</td>
+                                                <td>Wednesday</td>
+                                                <td>12:00 PM - 2:00 PM</td>
+                                                <td>3</td>
+                                                <td class="amount">€250</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function toggleTeacherInfo(companyId) {
+            const row = document.getElementById(companyId);
+            // Toggle the visibility of the teacher-info row
+            if (row.style.display === "table-row") {
+                row.style.display = "none";
+            } else {
+                row.style.display = "table-row";
+            }
+        }
+
+        function toggleActivityDetails(teacherId) {
+            const row = document.getElementById(teacherId);
+            // Toggle the visibility of the activity-info row for the teacher
+            if (row.style.display === "table-row") {
+                row.style.display = "none";
+            } else {
+                row.style.display = "table-row";
+            }
+        }
+    </script>
+
+</body>
+</html>

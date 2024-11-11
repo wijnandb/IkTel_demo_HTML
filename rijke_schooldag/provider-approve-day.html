@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Demo with Filtering</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .schedule-container {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            grid-gap: 10px;
+        }
+        .time-column {
+            display: flex;
+            flex-direction: column;
+        }
+        .time-slot {
+            height: 30px;
+            border-bottom: 1px solid #ccc;
+            padding-top: 5px;
+        }
+        .activities {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .activity {
+            height: 60px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            padding: 10px;
+            position: absolute;
+            transition: opacity 0.5s ease;
+        }
+        .overlap-1 {
+            width: 45%;
+            left: 0;
+            background-color: #a8d5e2;
+        }
+        .overlap-2 {
+            width: 45%;
+            left: 50%;
+            background-color: #f9c2c3;
+        }
+        .blur {
+            opacity: 0.2;
+        }
+        .highlight {
+            opacity: 1;
+        }
+        .dropdown-container {
+            margin-bottom: 20px;
+        }
+        select {
+            padding: 8px;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+    </style>
+    <script>
+        function filterActivities() {
+            const selectedSchool = document.getElementById("school-select").value;
+            const selectedTeacher = document.getElementById("teacher-select").value;
+
+            const activities = document.querySelectorAll('.activity');
+            
+            activities.forEach(activity => {
+                const school = activity.getAttribute('data-school');
+                const teacher = activity.getAttribute('data-teacher');
+
+                if ((selectedSchool === 'all' || selectedSchool === school) && 
+                    (selectedTeacher === 'all' || selectedTeacher === teacher)) {
+                    activity.classList.remove('blur');
+                    activity.classList.add('highlight');
+                } else {
+                    activity.classList.add('blur');
+                    activity.classList.remove('highlight');
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Schedule Demo with Filtering</h1>
+
+    <div class="dropdown-container">
+        <!-- School Dropdown -->
+        <label for="school-select">Select School:</label>
+        <select id="school-select" onchange="filterActivities()">
+            <option value="all">All schools</option>
+            <option value="school1">Greenfield High</option>
+            <option value="school2">Sunnyvale Academy</option>
+            <option value="school3">Lakeside School</option>
+            <option value="school4">Oakwood Academy</option>
+            <option value="school5">Riverdale School</option>
+            <option value="school6">Hilltop College</option>
+            <option value="school7">Maple Valley School</option>
+            <option value="school8">Cedar Grove Academy</option>
+        </select>
+
+        <!-- Teacher Dropdown -->
+        <label for="teacher-select">Select Teacher:</label>
+        <select id="teacher-select" onchange="filterActivities()">
+            <option value="all">All teachers</option>
+            <option value="teacher1">Mr. Smith</option>
+            <option value="teacher2">Ms. Johnson</option>
+            <option value="teacher3">Mr. Lee</option>
+            <option value="teacher4">Ms. Davis</option>
+            <option value="teacher5">Mr. Brown</option>
+            <option value="teacher6">Ms. Clark</option>
+        </select>
+    </div>
+
+    <div class="schedule-container">
+        <!-- Time Column with Half-Hour Divs -->
+        <div class="time-column">
+            <div class="time-slot">09:00</div>
+            <div class="time-slot">09:30</div>
+            <div class="time-slot">10:00</div>
+            <div class="time-slot">10:30</div>
+            <div class="time-slot">11:00</div>
+            <div class="time-slot">11:30</div>
+            <div class="time-slot">12:00</div>
+            <div class="time-slot">12:30</div>
+            <div class="time-slot">13:00</div>
+            <div class="time-slot">13:30</div>
+            <div class="time-slot">14:00</div>
+            <div class="time-slot">14:30</div>
+            <div class="time-slot">15:00</div>
+        </div>
+
+        <!-- Activities for the Day with 8 Schools and 6 Teachers -->
+        <div class="activities">
+            <!-- Overlapping activities -->
+            <div class="activity overlap-1 highlight" style="top: 0px;" data-school="school1" data-teacher="teacher1">
+                Gezond Eten & Koken<br>Greenfield High<br>Mr. Smith<br>09:00 - 10:00
+            </div>
+            <div class="activity overlap-2 highlight" style="top: 30px;" data-school="school3" data-teacher="teacher2">
+                Gezond Eten & Koken<br>Lakeside School<br>Ms. Johnson<br>09:30 - 10:30
+            </div>
+
+            <!-- More activities -->
+            <div class="activity overlap-1 highlight" style="top: 90px;" data-school="school2" data-teacher="teacher3">
+                Kunst & Cultuur<br>Sunnyvale Academy<br>Mr. Lee<br>10:30 - 11:30
+            </div>
+
+            <!-- Overlapping activities -->
+            <div class="activity overlap-1 highlight" style="top: 150px;" data-school="school4" data-teacher="teacher4">
+                Kunst & Cultuur<br>Oakwood Academy<br>Ms. Davis<br>11:30 - 12:30
+            </div>
+            <div class="activity overlap-2 highlight" style="top: 180px;" data-school="school5" data-teacher="teacher5">
+                Kunst & Cultuur<br>Riverdale School<br>Mr. Brown<br>12:00 - 13:00
+            </div>
+
+            <!-- More activities -->
+            <div class="activity overlap-1 highlight" style="top: 240px;" data-school="school6" data-teacher="teacher6">
+                Sport & Gezondheid<br>Hilltop College<br>Ms. Clark<br>13:00 - 14:00
+            </div>
+
+            <div class="activity overlap-1 highlight" style="top: 300px;" data-school="school7" data-teacher="teacher1">
+                Gezond Eten & Koken<br>Maple Valley School<br>Mr. Smith<br>14:00 - 15:00
+            </div>
+            <div class="activity overlap-2 highlight" style="top: 300px;" data-school="school8" data-teacher="teacher3">
+                Kunst & Cultuur<br>Cedar Grove Academy<br>Mr. Lee<br>14:00 - 15:00
+            </div>
+        </div>
+    </div>
+</body>
+</html>
