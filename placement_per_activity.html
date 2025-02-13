@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@^2.0/dist/tailwind.min.css" rel="stylesheet">
+    <title>Activities Page</title>
+    <script>
+        function toggleStudentInfo(row) {
+            const nextRow = row.nextElementSibling;
+            if (nextRow && nextRow.classList.contains('student-info')) {
+                nextRow.classList.toggle('hidden');
+            } else {
+                const newRow = document.createElement('tr');
+                newRow.classList.add('student-info');
+                
+                const enrolledText = row.cells[4].innerText;
+                const totalStudents = parseInt(enrolledText.match(/\((\d+)\)/)?.[1] || 0);
+                
+                newRow.innerHTML = getStudentListHTML(totalStudents);
+                row.parentNode.insertBefore(newRow, row.nextSibling);
+            }
+        }
+
+        function getStudentListHTML(totalStudents) {
+            let students = generateFakeStudents(totalStudents);
+            let html = `
+                <td colspan="7" class="p-4 bg-white shadow-md rounded-lg">
+                    <div class="overflow-auto max-h-60">
+                        <table class="w-full border">
+                            <thead class="bg-gray-200">
+                                <tr>
+                                    <th class="p-2 border">Name</th>
+                                    <th class="p-2 border">School</th>
+                                    <th class="p-2 border">Class</th>
+                                    <th class="p-2 border">Placements/Enrollments</th>
+                                    <th class="p-2 border">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+            students.forEach(student => {
+                html += `
+                    <tr class="border">
+                        <td class="p-2 border">${student.name}</td>
+                        <td class="p-2 border">${student.school}</td>
+                        <td class="p-2 border">${student.class}</td>
+                        <td class="p-2 border">${student.placements}/${student.enrollments}</td>
+                        <td class="p-2 border"><button class="bg-blue-500 text-white px-3 py-1 rounded" onclick="enrollStudent('${student.name}')">Enroll</button></td>
+                    </tr>`;
+            });
+
+            html += `</tbody></table></div></td>`;
+            return html;
+        }
+
+        function generateFakeStudents(count) {
+            let sampleSchools = ["School A", "School B", "School C"];
+            let students = [];
+            for (let i = 1; i <= count; i++) {
+                students.push({
+                    name: `Student ${i}`,
+                    school: sampleSchools[i % sampleSchools.length],
+                    class: Math.floor(Math.random() * 3) + 1,
+                    placements: Math.floor(Math.random() * 5),
+                    enrollments: Math.floor(Math.random() * 5) + 1
+                });
+            }
+            return students;
+        }
+
+        function enrollStudent(studentName) {
+            alert(`Enrolled ${studentName}!`);
+        }
+    </script>
+</head>
+<body class="bg-gray-100 p-10">
+    <div class="container mx-auto">
+        <table class="table-auto w-full bg-white shadow-md rounded-lg">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="px-4 py-2">Activity</th>
+                    <th class="px-4 py-2">Day</th>
+                    <th class="px-4 py-2">Time</th>
+                    <th class="px-4 py-2">Groups</th>
+                    <th class="px-4 py-2">Enrolled</th>
+                    <th class="px-4 py-2">Provider</th>
+                    <th class="px-4 py-2">Teacher</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="bg-white border-b hover:bg-gray-100 cursor-pointer" onclick="toggleStudentInfo(this)">
+                    <td class="px-4 py-2">Basketball</td>
+                    <td class="px-4 py-2">Wednesday</td>
+                    <td class="px-4 py-2">13:00</td>
+                    <td class="px-4 py-2">1,2,3</td>
+                    <td class="px-4 py-2">0/12 (20)</td>
+                    <td class="px-4 py-2">Karibu</td>
+                    <td class="px-4 py-2">John Doe</td>
+                </tr>
+                <tr class="bg-white border-b hover:bg-gray-100 cursor-pointer" onclick="toggleStudentInfo(this)">
+                    <td class="px-4 py-2">Programming</td>
+                    <td class="px-4 py-2">Thursday</td>
+                    <td class="px-4 py-2">13:00</td>
+                    <td class="px-4 py-2">6,7,8</td>
+                    <td class="px-4 py-2">0/8 (15)</td>
+                    <td class="px-4 py-2">Karibu</td>
+                    <td class="px-4 py-2">John Doe</td>
+                </tr>
+                <tr class="bg-white border-b hover:bg-gray-100 cursor-pointer" onclick="toggleStudentInfo(this)">
+                    <td class="px-4 py-2">Dance</td>
+                    <td class="px-4 py-2">Wednesday</td>
+                    <td class="px-4 py-2">13:00</td>
+                    <td class="px-4 py-2">4,5</td>
+                    <td class="px-4 py-2">0/12 (5)</td>
+                    <td class="px-4 py-2">-</td>
+                    <td class="px-4 py-2">-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
