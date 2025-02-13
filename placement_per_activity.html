@@ -37,15 +37,17 @@
                                     <th class="p-2 border">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>`;
-            students.forEach(student => {
+                            <tbody id="student-list">`;
+            students.forEach((student, index) => {
                 html += `
                     <tr class="border">
                         <td class="p-2 border">${student.name}</td>
                         <td class="p-2 border">${student.school}</td>
                         <td class="p-2 border">${student.class}</td>
-                        <td class="p-2 border">${student.placements}/${student.enrollments}</td>
-                        <td class="p-2 border"><button class="bg-blue-500 text-white px-3 py-1 rounded" onclick="enrollStudent('${student.name}')">Enroll</button></td>
+                        <td class="p-2 border" id="enrollments-${index}">${student.placements}/${student.enrollments}</td>
+                        <td class="p-2 border">
+                            <button id="enroll-btn-${index}" class="bg-blue-500 text-white px-3 py-1 rounded" onclick="enrollStudent(${index})">Enroll</button>
+                        </td>
                     </tr>`;
             });
 
@@ -68,8 +70,16 @@
             return students;
         }
 
-        function enrollStudent(studentName) {
-            alert(`Enrolled ${studentName}!`);
+        function enrollStudent(index) {
+            const enrollCell = document.getElementById(`enrollments-${index}`);
+            const enrollButton = document.getElementById(`enroll-btn-${index}`);
+
+            let [placements, enrollments] = enrollCell.innerText.split('/').map(Number);
+            enrollCell.innerText = `${placements}/${enrollments + 1}`;
+            enrollButton.innerText = "Enrolled";
+            enrollButton.disabled = true;
+            enrollButton.classList.remove("bg-blue-500");
+            enrollButton.classList.add("bg-gray-400", "cursor-not-allowed");
         }
     </script>
 </head>
